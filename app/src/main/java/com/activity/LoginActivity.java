@@ -48,6 +48,13 @@ public class LoginActivity extends BaseActivity implements LoginInter, View.OnCl
         Stetho.initializeWithDefaults(this);
 
         initForm();
+
+        String url = getApiBaseUrl();
+        if(url !=null){
+            L.d(TAG,url);
+            OkHttpUtil.setBaseUrl(url);
+        }
+
     }
 
 
@@ -68,17 +75,7 @@ public class LoginActivity extends BaseActivity implements LoginInter, View.OnCl
     public void onClick(View view) {
         switch (view.getId()){
             case id_login_button:
-                String server_ip = getServerIpInput().getText().toString();
-                if(!server_ip.isEmpty()){
-                    OkHttpUtil.setBaseUrl("http://" + server_ip);
-                }else {
-                    String url = getApiBaseUrl();
-                    if(url !=null){
-                        L.d(TAG,url);
-                        OkHttpUtil.setBaseUrl(getApiBaseUrl());
-                    }
-                }
-
+                L.d(TAG, OkHttpUtil.getBaseUrl());
                 login(getUserNameInput().getText().toString(),
                         getPasswordInput().getText().toString());
                 break;
@@ -145,6 +142,7 @@ public class LoginActivity extends BaseActivity implements LoginInter, View.OnCl
             ActivityUtil.startActivitySimple(this,MainActivity.class);
 
         }else {
+            L.d(TAG,OkHttpUtil.getBaseUrl());
             HttpApiUtil.login(user,
                     new Callback() {
                         @Override

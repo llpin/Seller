@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.common.utils.HtmlUtil;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
@@ -49,7 +50,7 @@ public class ContinuousCaptureActivity extends BaseActivity {
             if(result.getText() == null || result.getText().equals(lastText)) {
 //                 Prevent duplicate scans
 //                String html = "已扫描<big>"+ codeCount +"</big>件商品<br/><font color='#ff0000'>重复扫码<font>";
-//                countText.setText(Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY));
+//                countText.setText(HtmlUtil.fromHtml(html));
                 return;
             }
             lastText = result.getText();
@@ -57,7 +58,7 @@ public class ContinuousCaptureActivity extends BaseActivity {
             if(isTestModel()){
                 codeCount ++;
                 String html = "已扫描保真<font color='#ff0000'><big>"+ codeCount +"</big></font>件商品";
-                countText.setText(Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY));
+                countText.setText(HtmlUtil.fromHtml(html));
             }else {
                 HttpApiUtil.verifyProductCode(contractId,lastText, new Callback() {
                     @Override
@@ -72,7 +73,7 @@ public class ContinuousCaptureActivity extends BaseActivity {
                         if(resultResponseModel.getCode().compareTo("200") == 0){
                             codeCount ++;
                             String html = "已扫描保真<font color='#ff0000'><big>"+ codeCount +"</big></font>件商品";
-                            countText.setText(Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY));
+                            countText.setText(HtmlUtil.fromHtml(html));
                         }else {
                             runOnUiThread(new MessageToast(ContinuousCaptureActivity.this,
                                     resultResponseModel.getMessage()));
@@ -106,7 +107,7 @@ public class ContinuousCaptureActivity extends BaseActivity {
 
         countText = (TextView)findViewById(R.id.countTextView);
         String html = "已扫描保真<font color='#ff0000'><big>"+ codeCount +"</big></font>件商品";
-        countText.setText(Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY));
+        countText.setText(HtmlUtil.fromHtml(html));
 
         contractId = getIntent().getLongExtra(getResources().getString(R.string.contract_id_extra), 0);
     }
